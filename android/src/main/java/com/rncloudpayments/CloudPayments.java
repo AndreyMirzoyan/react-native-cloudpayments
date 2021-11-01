@@ -5,8 +5,8 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
-import ru.cloudpayments.cpcard.CPCard;
-import ru.cloudpayments.cpcard.CPCardFactory;
+// import ru.cloudpayments.cpcard.CPCard;
+// import ru.cloudpayments.cpcard.CPCardFactory;
 
 public class CloudPayments extends ReactContextBaseJavaModule {
   public CloudPayments(ReactApplicationContext reactContext) {
@@ -18,7 +18,7 @@ public class CloudPayments extends ReactContextBaseJavaModule {
     return "RNCloudPayments";
   }
 
-  @ReactMethod
+  /*@ReactMethod
   public void isValidNumber(String cardNumber, String cardExp, String cardCvv, Promise promise) {
     try {
       CPCard card = CPCardFactory.create(cardNumber, cardExp, cardCvv);
@@ -48,6 +48,46 @@ public class CloudPayments extends ReactContextBaseJavaModule {
   public void createCryptogram(String cardNumber, String cardExp, String cardCvv, String publicId, Promise promise) {
     try {
       CPCard card = CPCardFactory.create(cardNumber, cardExp, cardCvv);
+
+      String cryptoprogram = card.cardCryptogram(publicId);
+
+      promise.resolve(cryptoprogram);
+    } catch (Exception e) {
+      e.printStackTrace();
+      promise.reject(e.getMessage());
+    }
+  }*/
+
+   @ReactMethod
+  public void isValidNumber(String cardNumber, String cardExp, String cardCvv, Promise promise) {
+    try {
+      RNCPCard card = new RNCPCard(cardNumber, cardExp, cardCvv);
+
+      boolean numberStatus = card.isValidNumber();
+
+      promise.resolve(numberStatus);
+    } catch (Exception e) {
+      promise.reject(e.getMessage());
+    }
+  }
+
+  @ReactMethod
+  public void getType(String cardNumber, String cardExp, String cardCvv, Promise promise) {
+    try {
+      RNCPCard card = new RNCPCard(cardNumber, cardExp, cardCvv);
+
+      String cardType = card.getType();
+
+      promise.resolve(cardType);
+    } catch (Exception e) {
+      promise.reject(e.getMessage());
+    }
+  }
+
+  @ReactMethod
+  public void createCryptogram(String cardNumber, String cardExp, String cardCvv, String publicId, Promise promise) {
+    try {
+      RNCPCard card = new RNCPCard(cardNumber, cardExp, cardCvv);
 
       String cryptoprogram = card.cardCryptogram(publicId);
 
